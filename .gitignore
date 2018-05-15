@@ -4,3 +4,13 @@
 
 /workshop-code-base/ShareDataSite/ShareDataSite/bin
 /workshop-code-base/ShareDataSite/ShareDataSite/obj/
+/workshop-code-base/ShareDataSite/ExcelAddIn/obj/Debug
+/workshop-code-base/ShareDataSite/packages
+/workshop-code-base/ShareDataSite/PowerPointAddIn/obj/Debug
+/workshop-code-base/ShareDataSite/ShareDataService/bin/Debug
+/workshop-code-base/ShareDataSite/ShareDataService/obj/Debug
+/workshop-code-base/ShareDataSite/WordAddIn/bin/Debug
+/workshop-code-base/ShareDataSite/WordAddIn/obj/Debug
+/workshop-code-base/ShareDataSite/WordAddIn/pkgobj/Debug
+/workshop-code-base/ShareDataSite/.vs
+/workshop-code-base/.vs
