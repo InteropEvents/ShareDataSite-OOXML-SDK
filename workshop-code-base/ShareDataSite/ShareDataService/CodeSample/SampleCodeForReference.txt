@@ -1,0 +1,49 @@
+﻿
+// Add the following code to PowerPointParse.cs file(line 66)
+
+            Stream stream = null;
+            byte[] streamByteArray = null;
+
+            // Find image and add to the result.
+            foreach (var slide in slideParts)
+            {
+                result.AddRange(slide.ImageParts.Select(m =>
+                {
+                    stream = m.GetStream();
+                    streamByteArray = new byte[stream.Length];
+                    stream.Read(streamByteArray, 0, (int)stream.Length);
+                    return new TempData { StorageType = StorageType.ImageType, Data = Convert.ToBase64String(streamByteArray) };
+                }).ToArray());
+            }
+
+
+
+//  Add the following code to WordParse.cs file(line 136)
+
+            var imageParts = wordprocessingDocument.MainDocumentPart.ImageParts;
+            byte[] streamByteArray = null;
+            Stream stream = null;
+            foreach (ImagePart item in imageParts)
+            {
+                stream = item.GetStream();
+                streamByteArray = new byte[stream.Length];
+                stream.Read(streamByteArray, 0, (int)stream.Length);
+                result.Add(new TempData { StorageType = StorageType.ImageType, Data = Convert.ToBase64String(streamByteArray) });
+            }
+
+
+
+// Add the following code to ExcelParse.cs file(line 83)
+
+            if (worksheetPart.DrawingsPart != null && worksheetPart.DrawingsPart.ImageParts != null)
+            {
+                var imgs = worksheetPart.DrawingsPart.ImageParts.Select(m =>
+                {
+                    stream = m.GetStream();
+                    streamByteArray = new byte[stream.Length];
+                    stream.Read(streamByteArray, 0, (int)stream.Length);
+                    return new TempData { StorageType = StorageType.ImageType, Data = Convert.ToBase64String(streamByteArray) };
+                }).ToArray();
+                result.AddRange(imgs);
+            }
+               

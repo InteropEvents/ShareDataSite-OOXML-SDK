@@ -1,0 +1,57 @@
+﻿.hidden {
+    display: none;
+}
+
+body {
+    overflow: hidden;
+}
+
+.spa-left, .spa-right {
+    position: absolute;
+    background-color: inherit;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+}
+
+@keyframes in {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes out {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    99% {
+        transform: translateX(99%);
+        opacity: 0.01;
+    }
+
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.page.slideIn {
+    animation: in .5s forwards;
+}
+
+.page.slideOut {
+    animation: out .5s forwards;
+}
+
+.mesh {
+}

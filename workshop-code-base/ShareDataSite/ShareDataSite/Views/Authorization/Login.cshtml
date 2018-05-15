@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = null;
+}
+<script src="/Scripts/jquery.min.js"></script>
+@Html.Partial("_AuthorizedSetting")
+<script>
+    $(function () {
+        var checkOauth2Params = function (setting) {
+            var missing = "";
+            if (!setting.client_id) { missing += " client_id" }
+            if (!setting.auth_url) { missing += " auth_url" }
+            if (!setting.response_type) { missing += " response_type" }
+            //if(!setting.client_secret && setting.response_type == "code") {missing += " client_secret"}
+            if (!setting.token_url && setting.response_type == "code") { missing += " token_url" }
+            if (!setting.redirect_uri) { missing += " redirect_uri" }
+            if (missing) {
+                var error_msg = "Oauth2 parameters missing:" + missing;
+                errorCallback(error_msg, { error: error_msg });
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        // performs logout after oauth redirect
+        var oauth2Logout = function (setting) {
+            if (setting.logout_url) {
+                var s = document.createElement("script");
+                s.src = setting.logout_url;
+                $("head").append(s);
+            }
+        }
+        // if params missing return
+        if (!checkOauth2Params(setting)) return;
+
+        // build oauth login url
+        var paramObj = {
+            client_id: setting.client_id,
+            redirect_uri: setting.redirect_uri,
+            response_type: setting.response_type
+        };
+        $.extend(paramObj, setting.other_params);
+        location.href = setting.auth_url + '?' + $.param(paramObj);
+    })
+</script>
