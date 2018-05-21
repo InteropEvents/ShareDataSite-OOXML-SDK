@@ -61,19 +61,20 @@ namespace ShareDataService
                                     select GetSlideText(item);
 
                     result.AddRange(TempData.GetTempDataIEnumerable(StorageType.TextType, slideText));
-                    Stream stream = null;
-                    byte[] streamByteArray = null;
 
                     // Find image and add to the result.
                     foreach (var slide in slideParts)
                     {
-                        result.AddRange(slide.ImageParts.Select(m =>
+                        var images = slide.ImageParts.Select(
+                        m =>
                         {
-                            stream = m.GetStream();
-                            streamByteArray = new byte[stream.Length];
+                            var stream = m.GetStream();
+                            var streamByteArray = new byte[stream.Length];
                             stream.Read(streamByteArray, 0, (int)stream.Length);
                             return new TempData { StorageType = StorageType.ImageType, Data = Convert.ToBase64String(streamByteArray) };
-                        }).ToArray());
+                        });
+
+                        result.AddRange(images);
                     }
 
                     return result.ToArray();
