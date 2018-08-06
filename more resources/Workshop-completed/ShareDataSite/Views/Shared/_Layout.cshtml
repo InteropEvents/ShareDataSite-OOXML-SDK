@@ -27,6 +27,16 @@
     <script src="/Scripts/lib/oauth.js"></script>
     <script src="/Scripts/lib/app.js"></script>
     <script src="/Scripts/index.js"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-123430470-2"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-123430470-2');
+    </script>
+
     @RenderSection("Script", false)
 </head>
 <body class="ms-Fabric">
