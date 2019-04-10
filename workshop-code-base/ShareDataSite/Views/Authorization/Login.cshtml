@@ -39,7 +39,8 @@
         var paramObj = {
             client_id: setting.client_id,
             redirect_uri: setting.redirect_uri,
-            response_type: setting.response_type
+            response_type: setting.response_type,
+            prompt: "login"
         };
         $.extend(paramObj, setting.other_params);
         location.href = setting.auth_url + '?' + $.param(paramObj);
