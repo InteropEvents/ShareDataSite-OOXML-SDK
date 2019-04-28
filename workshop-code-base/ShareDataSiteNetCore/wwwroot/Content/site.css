@@ -1,0 +1,138 @@
+﻿.hidden {
+    display: none;
+}
+
+body {
+    overflow: hidden;
+}
+
+.spa-left, .spa-right {
+    position: absolute;
+    background-color: inherit;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+}
+
+@keyframes in {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes out {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    99% {
+        transform: translateX(99%);
+        opacity: 0.01;
+    }
+
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.page.slideIn {
+    animation: in .5s forwards;
+}
+
+.page.slideOut {
+    animation: out .5s forwards;
+}
+
+.mesh {
+}
+/*index.html*/
+.table-responsive {
+    margin-top: .5em;
+    padding: .5em;
+}
+
+    .table-responsive .ms-Button {
+        background: #d0d0d0;
+    }
+
+.ms-ListItem-image img {
+    width: 48px;
+    height: 48px;
+    display: block;
+    margin: 6px auto;
+}
+
+.func {
+    position: absolute;
+    top: 11px;
+    right: 17px;
+}
+
+.base {
+    border-bottom: 1px solid #d0d0d0;
+    padding: 16px;
+    cursor: pointer;
+}
+
+    .base.top {
+        border-top: 1px solid #d0d0d0;
+    }
+
+    .base:hover {
+        background: #d0d0d0;
+    }
+
+.text {
+}
+
+img {
+    max-width: 100%;
+}
+
+.filelist ul {
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+}
+
+    .filelist ul li {
+        text-decoration: none;
+        padding: 16px;
+        border-bottom: thin dotted #808080;
+    }
+
+table td {
+    border: 1px solid #999;
+    width: 80px;
+    height: 40px;
+    margin: 10px;
+}
+
+td.selected {
+    background-color: #85be09;
+}
+
+.ms-Link {
+    display: block;
+    margin: .5em;
+}
+
+.btnlist {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0.5em;
+}
+
+.image.hidden {
+    display: none;
+}

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2020
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareDataSite", "ShareDataSite\ShareDataSite.csproj", "{BF1C468D-5E34-466E-AF6E-0DC0F2803A53}"
 EndProject
@@ -12,6 +12,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerPointAddIn", "PowerPointAddIn\PowerPointAddIn.csproj", "{5EDD33DD-C933-4BD6-9C93-D9D3D2E073FE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelAddIn", "ExcelAddIn\ExcelAddIn.csproj", "{3EF53E43-F617-4E49-AA89-F6824AC57CA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareDataSiteNetCore", "ShareDataSiteNetCore\ShareDataSiteNetCore.csproj", "{0233954C-FB6D-4A06-8336-D6E1F75DBDB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareDataServiceNetCore", "ShareDataServiceNetCore\ShareDataServiceNetCore.csproj", "{2CA87EFA-74FC-4FBE-9B70-B153E4213686}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,14 @@ Global
 		{3EF53E43-F617-4E49-AA89-F6824AC57CA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3EF53E43-F617-4E49-AA89-F6824AC57CA8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3EF53E43-F617-4E49-AA89-F6824AC57CA8}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{0233954C-FB6D-4A06-8336-D6E1F75DBDB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0233954C-FB6D-4A06-8336-D6E1F75DBDB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0233954C-FB6D-4A06-8336-D6E1F75DBDB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0233954C-FB6D-4A06-8336-D6E1F75DBDB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CA87EFA-74FC-4FBE-9B70-B153E4213686}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CA87EFA-74FC-4FBE-9B70-B153E4213686}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CA87EFA-74FC-4FBE-9B70-B153E4213686}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CA87EFA-74FC-4FBE-9B70-B153E4213686}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
