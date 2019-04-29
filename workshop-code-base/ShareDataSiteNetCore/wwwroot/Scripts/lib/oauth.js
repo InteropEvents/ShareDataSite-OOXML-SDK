@@ -1,6 +1,4 @@
-﻿$.graph = function (setting) {
-    this.setting = setting;
-};
+﻿$.graph = function () { };
 
 $.graph.prototype.login = function (token, authorization, expire_time) {
     if (token && authorization) {//called from microsoft authentication in dialog
@@ -50,9 +48,9 @@ $.graph.prototype.refreshToken = function () {
     });
 };
 
-$.graph.login = function (setting) {
+$.graph.login = function (auth_url) {
     //intialize graph
-    var graph = window.graph = new $.graph(setting);
+    var graph = window.graph = new $.graph();
     var _dlg;
 
     return function (callback) {
@@ -62,7 +60,7 @@ $.graph.login = function (setting) {
         } else {
             //open office dialog window
             Office.context.ui.displayDialogAsync(
-                location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + "/Authorization/Login",
+                location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + "/authorize.html",
                 { height: 80, width: 50 },
                 function (result) {
                     _dlg = result.value;
@@ -96,4 +94,4 @@ $.graph.login = function (setting) {
                 });
         }
     };
-}(setting);
+}();

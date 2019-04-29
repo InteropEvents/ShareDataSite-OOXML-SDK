@@ -20,7 +20,6 @@
   <DisplayName DefaultValue="ShareDataSite" />
   <Description DefaultValue="ShareDataSite Description"/>
   <!-- Icon for your add-in. Used on installation screens and the add-ins dialog. -->
-  <IconUrl DefaultValue="~remoteAppUrl/Images/Button32x32.png" />
 
   <SupportUrl DefaultValue="http://www.contoso.com" />
   <!-- Domains that will be allowed when navigating. For example, if you use ShowTaskpane and then have an href link, navigation will only be allowed if the domain is on this list. -->
@@ -36,7 +35,7 @@
     <Host Name="Document" />
   </Hosts>
   <DefaultSettings>
-    <SourceLocation DefaultValue="~remoteAppUrl/" />
+    <SourceLocation DefaultValue="https://localhost:44367/" />
   </DefaultSettings>
   <!-- End TaskPane Mode integration.  -->
 
@@ -116,13 +115,13 @@
     <!-- You can use resources across hosts and form factors. -->
     <Resources>
       <bt:Images>
-        <bt:Image id="Contoso.tpicon_16x16" DefaultValue="~remoteAppUrl/Images/Button16x16.png" />
-        <bt:Image id="Contoso.tpicon_32x32" DefaultValue="~remoteAppUrl/Images/Button32x32.png" />
-        <bt:Image id="Contoso.tpicon_80x80" DefaultValue="~remoteAppUrl/Images/Button80x80.png" />
+        <bt:Image id="Contoso.tpicon_16x16" DefaultValue="https://localhost:44367/Images/Button16x16.png" />
+        <bt:Image id="Contoso.tpicon_32x32" DefaultValue="https://localhost:44367/Images/Button32x32.png" />
+        <bt:Image id="Contoso.tpicon_80x80" DefaultValue="https://localhost:44367/Images/Button80x80.png" />
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="Contoso.DesktopFunctionFile.Url" DefaultValue="~remoteAppUrl/" />
-        <bt:Url id="Contoso.Taskpane.Url" DefaultValue="~remoteAppUrl/" />
+        <bt:Url id="Contoso.DesktopFunctionFile.Url" DefaultValue="https://localhost:44367/index.html" />
+        <bt:Url id="Contoso.Taskpane.Url" DefaultValue="https://localhost:44367/index.html" />
         <bt:Url id="Contoso.GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812" />
       </bt:Urls>
       <!-- ShortStrings max characters==125. -->

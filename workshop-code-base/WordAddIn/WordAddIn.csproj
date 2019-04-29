@@ -50,17 +50,6 @@
       <OpcRelationship>manifest-oemanifest</OpcRelationship>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ShareDataSite\ShareDataSite.csproj">
-      <Project>{BF1C468D-5E34-466E-AF6E-0DC0F2803A53}</Project>
-      <Name>ShareDataSite</Name>
-      <Private>True</Private>
-      <RoleType>Web</RoleType>
-      <OutputItemType>SharePointWebProjectOutput</OutputItemType>
-      <RoleName>ShareDataSite</RoleName>
-      <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -5,7 +5,7 @@
     //register function and called when login success
     app.ready = function (func) {
         onready.push(func);
-    }
+    };
 }();
 //when Office loaded complete
 Office.initialize = function () {
@@ -76,13 +76,13 @@ Office.initialize = function () {
                             var address = range.address;
                             var exclamationMark = range.address.lastIndexOf("!"), colon = address.lastIndexOf(":");
                             var start, end, row;
-                            var tempStart = address.substring(exclamationMark + 1, colon == -1 ? address.length : colon);
+                            var tempStart = address.substring(exclamationMark + 1, colon === -1 ? address.length : colon);
                             var firstDigit = tempStart.match(/\d/);
                             var indexed = tempStart.indexOf(firstDigit);
                             row = parseInt(tempStart.substr(indexed)) + tableLength - 1;
                             start = tempStart.substr(0, indexed);
                             end = convert26BSToDS(start) + tableWidth - 1;
-                            if (colon == -1) {
+                            if (colon === -1) {
                                 return address + ":" + convertDSTo26BS(end) + row;
                             } else {
                                 return address.substring(0, colon) + ":" + convertDSTo26BS(end) + row;
@@ -125,19 +125,17 @@ Office.initialize = function () {
             messageBanner.toggleExpansion();
 
             setTimeout(messageBanner.hideBanner, 3000);
-        }
+        };
 
         //call function in app.onready when login success
         $.graph.login(function (res) {
             if (res) {
                 app.onready.map(function (func) {
                     func();
-                })
+                });
             }
         });
-
-    })
-
+    });
 
     function convert26BSToDS(code) {
         var num = -1;
@@ -159,8 +157,8 @@ Office.initialize = function () {
             return code;
         }
         while (num > 0) {
-            var m = num % 26
-            if (m == 0) {
+            var m = num % 26;
+            if (m === 0) {
                 m = 26;
             }
             code = String.fromCharCode(64 + parseInt(m)) + code;
