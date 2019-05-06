@@ -19,7 +19,6 @@
   <DisplayName DefaultValue="ShareDataSite" />
   <Description DefaultValue="ShareDataSite Description"/>
   <!-- Icon for your add-in. Used on installation screens and the add-ins dialog. -->
-  <IconUrl DefaultValue="~remoteAppUrl/Images/Button32x32.png" />
 
   <SupportUrl DefaultValue="http://www.contoso.com" />
   <!-- Domains that will be allowed when navigating. For example, if you use ShowTaskpane and then have an href link, navigation will only be allowed if the domain is on this list. -->
@@ -34,7 +33,7 @@
     <Host Name="Presentation" />
   </Hosts>
   <DefaultSettings>
-    <SourceLocation DefaultValue="~remoteAppUrl/" />
+    <SourceLocation DefaultValue="https://localhost:44367/" />
     <!--<RequestedWidth>400</RequestedWidth>-->
     <!--<RequestedHeight>400</RequestedHeight>-->
   </DefaultSettings>

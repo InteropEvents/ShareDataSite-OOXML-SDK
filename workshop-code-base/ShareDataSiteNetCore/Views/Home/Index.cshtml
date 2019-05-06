@@ -1,0 +1,55 @@
+﻿@{
+    ViewData["Title"] = "data share demo";
+    Layout = "_Layout";
+}
+<div class="page spa-left">
+    <div style="padding:16px;background-color:#f3f3f3;">
+        <div>
+            <span style="font-size:16px;">DATA SHARE DEMO</span>
+        </div>
+    </div>
+    <div class="filelist" style="margin-top:16px;" id="filelist">
+        <ul>
+            <li class="ms-ListItem ms-ListItem--image" v-for="f in fileList" v-on:click="generateRaw(f.DownloadPath,f.Id)">
+                <div class="ms-ListItem-image" style="background:none;">
+                    <img v-if="f.Name.endsWith('.doc')||f.Name.endsWith('.docx')" src="~/Content/image/word_32x2.png" alt="Word logo">
+                    <img v-if="f.Name.endsWith('.xls')||f.Name.endsWith('.xlsx')" src="~/Content/image/excel_32x2.png" alt="Excel logo">
+                    <img v-if="f.Name.endsWith('.ppt')||f.Name.endsWith('.pptx')" src="~/Content/image/powerpoint_32x2.png" alt="PowerPoint logo">
+                </div>
+                <span class="ms-ListItem-primaryText">{{f.Name}}</span>
+                <span class="ms-ListItem-secondaryText">{{transDateTime(f.CreatedDateTime)}}</span>
+                <span class="ms-ListItem-tertiaryText">{{f.Path}}</span>
+                <div class="ms-ListItem-selectionTarget"></div>
+            </li>
+        </ul>
+    </div>
+</div>
+<div id="dialogcontainer" class="page spa-right hidden" style="background: white;">
+    <a class="ms-Link" href="javascript:closedialog()" title="More info about Example Link">&lt;BackToFileList</a>
+    <div class="content" style="position:absolute;top:30px;left:0;right:0;bottom:0;overflow-y:auto;">
+
+    </div>
+    <div id="mesh" class="mesh" style="width:100%;height:100%;position:absolute;top:0;left:0;background:rgba(147, 147, 147, 0.71);">
+        <div style="margin:200px auto;width:120px;">
+            <div class="ms-Spinner ms-Spinner--large">
+                <div class="ms-Spinner-label">
+                    Loading...
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="checkButton" type="text/html">
+    <div class="btnlist">
+        <button class="ms-Button ms-Button--primary" data-type="text">
+            <span class="ms-Button-label">Text</span>
+        </button>
+        <button class="ms-Button ms-Button--primary" data-type="image">
+            <span class="ms-Button-label">Image</span>
+        </button>
+        <button class="ms-Button ms-Button--primary" data-type="table">
+            <span class="ms-Button-label">Table</span>
+        </button>
+    </div>
+</script>
+<script src="/Scripts/index.js"></script>

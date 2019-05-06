@@ -15,20 +15,19 @@ namespace ShareDataSiteNetCore.Controllers
     [ApiController]
     public class RawDataController : ControllerBase
     {
-
         [HttpPost]
         public string GetHtmlAfterTransformData()
         {
             try
             {
-                // Get Onedrive file download address.
-                Stream req = Request.Body;
-                req.Seek(0, SeekOrigin.Begin);
-                string json = new StreamReader(req).ReadToEnd();
                 InputObject inputOjbect = null;
                 try
                 {
-                    inputOjbect = JsonConvert.DeserializeObject<InputObject>(json);
+                    using (var reader = new StreamReader(Request.Body))
+                    {
+                        string json = reader.ReadToEnd();
+                        inputOjbect = JsonConvert.DeserializeObject<InputObject>(json);
+                    }
                 }
                 catch (Exception)
                 {
@@ -84,7 +83,6 @@ namespace ShareDataSiteNetCore.Controllers
         /// OneDrive access token.
         /// </summary>
         public string AccessToken { get; set; }
-
         /// <summary>
         /// File id in OneDrive.
         /// </summary>

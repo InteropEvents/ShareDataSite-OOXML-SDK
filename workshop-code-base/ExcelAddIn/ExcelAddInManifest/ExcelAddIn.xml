@@ -38,7 +38,7 @@
     </Sets>
   </Requirements>
   <DefaultSettings>
-    <SourceLocation DefaultValue="~remoteAppUrl/" />
+    <SourceLocation DefaultValue="https://localhost:44367/" />
     <!--<RequestedWidth>400</RequestedWidth>
     <RequestedHeight>400</RequestedHeight>-->
   </DefaultSettings>

@@ -91,7 +91,7 @@ var fileListVM = new Vue({
             data.downloadUri = path;
             data.fileId = id;
             $.ajax({
-                url: "/api/getrawdata",
+                url: "/api/RawData",
                 method: "post",
                 data: JSON.stringify(data),
                 contentType: "application/json; charset=utf-8",
@@ -183,12 +183,13 @@ var fileListVM = new Vue({
                 },
                 complete: function (data) {
 
-                },
+                }
             });
         },
-        transDateTime: transDateTime,
+        transDateTime: transDateTime
     }
 });
+
 app.ready(function (graph) {
     fileListVM.getOneDriveFileList();
     //spinner initialize
@@ -196,7 +197,7 @@ app.ready(function (graph) {
     for (var i = 0; i < SpinnerElements.length; i++) {
         new fabric['Spinner'](SpinnerElements[i]);
     }
-})
+});
 
 $(document).mouseup(function () {
     isMouseDown = false;

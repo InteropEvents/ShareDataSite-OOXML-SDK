@@ -28,9 +28,9 @@ namespace ShareDataSiteNetCore
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.Configure<AzureADConfig>(config =>
             {
-                config.Client_id = "e0375f87-c47c-4180-9e20-ed3cebd53353";
-                config.Client_secret = "xvqmxVWR403=(crCZGQ93=!";
-                config.Redirect_uri = "https://localhost:44367/authorize.html";
+                config.Client_Id = "e0375f87-c47c-4180-9e20-ed3cebd53353";
+                config.Client_Secret = "xvqmxVWR403=(crCZGQ93=!";
+                config.Redirect_Uri = "https://localhost:44367/Authorize";
                 config.Scope = "offline_access openid User.Read Files.Read.All Files.ReadWrite.All Sites.Read.All Sites.ReadWrite.All";
             });
         }
@@ -56,12 +56,12 @@ namespace ShareDataSiteNetCore
     public class AzureADConfig
     {
         public string Auth_Url { get; set; } = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize";
-        public string Token_url { get; set; } = "https://login.microsoftonline.com/common/oauth2/v2.0/token";
-        public string Logout_url { get; set; }
-        public string Client_id { get; set; }
-        public string Client_secret { get; set; }
-        public string Response_type { get; set; } = "code";
-        public string Redirect_uri { get; set; }
+        public string Token_Url { get; set; } = "https://login.microsoftonline.com/common/oauth2/v2.0/token";
+        public string Logout_Url { get; set; }
+        public string Client_Id { get; set; }
+        public string Client_Secret { get; set; }
+        public string Response_Type { get; set; } = "code";
+        public string Redirect_Uri { get; set; }
         public string Scope { get; set; }
     }
 }

@@ -24,7 +24,7 @@ $.graph.prototype.login = function (token, authorization, expire_time) {
     //auto refresh token
     setTimeout(this.refreshToken.bind(this), function () {
         var span = new Date(this.expire_time) - new Date();
-        return ((span - 1000000) < 0 ? 0 : (span - 1000000));
+        return span - 1000000 < 0 ? 0 : span - 1000000;
     }.bind(this)());
     return true;
 };
@@ -60,7 +60,7 @@ $.graph.login = function (auth_url) {
         } else {
             //open office dialog window
             Office.context.ui.displayDialogAsync(
-                location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + "/authorize.html",
+                location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + "/Login",
                 { height: 80, width: 50 },
                 function (result) {
                     _dlg = result.value;
@@ -68,14 +68,14 @@ $.graph.login = function (auth_url) {
                         var authorization = $.hashParam(msg.message);
                         //achieve authentication in backend
                         $.ajax({
-                            url: "/Authorization/Code",
+                            url: "/authorize",
                             data: {
-                                "code": authorization.code,
+                                "code": authorization.code
                             },
                             type: 'POST',
                             success: function (data) {
                                 var access_token;
-                                if ((data instanceof Object)) {
+                                if (data instanceof Object) {
                                     access_token = data.access_token;
                                 } else {
                                     access_token = data.getParam("access_token");
