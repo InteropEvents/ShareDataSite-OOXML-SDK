@@ -73,7 +73,7 @@ var fileListVM = new Vue({
     el: "#filelist",
     data: {
         fileList: [],
-        queryUrl: '',
+        queryUrl: ''
     },
     methods: {
         getOneDriveFileList: function () {
@@ -191,6 +191,10 @@ var fileListVM = new Vue({
 });
 
 app.ready(function (graph) {
+    $(document).mouseup(function () {
+        isMouseDown = false;
+    });
+
     fileListVM.getOneDriveFileList();
     //spinner initialize
     var SpinnerElements = document.querySelectorAll(".ms-Spinner");
@@ -199,6 +203,3 @@ app.ready(function (graph) {
     }
 });
 
-$(document).mouseup(function () {
-    isMouseDown = false;
-});

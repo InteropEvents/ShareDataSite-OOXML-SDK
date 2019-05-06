@@ -22,10 +22,10 @@ $.graph.prototype.login = function (token, authorization, expire_time) {
     this.authorization = authorization;
     this.expire_time = expire_time;
     //auto refresh token
-    setTimeout(this.refreshToken.bind(this), function () {
-        var span = new Date(this.expire_time) - new Date();
-        return span - 1000000 < 0 ? 0 : span - 1000000;
-    }.bind(this)());
+    //setTimeout(this.refreshToken.bind(this), function () {
+    //    var span = new Date(this.expire_time) - new Date();
+    //    return span - 1000000 < 0 ? 0 : span - 1000000;
+    //}.bind(this)());
     return true;
 };
 
@@ -95,3 +95,10 @@ $.graph.login = function (auth_url) {
         }
     };
 }();
+
+$.graph.logout = function () {
+    window.sessionStorage.token = null;
+    window.sessionStorage.authorization = null;
+    window.sessionStorage.expire_time = null;
+    window.graph = null;
+};

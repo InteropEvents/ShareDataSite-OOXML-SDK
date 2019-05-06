@@ -7,6 +7,7 @@
         onready.push(func);
     };
 }();
+
 //when Office loaded complete
 Office.initialize = function () {
     var app = window.app;
@@ -21,7 +22,7 @@ Office.initialize = function () {
                 text += possible.charAt(Math.floor(Math.random() * possible.length));
 
             return text;
-        }
+        };
 
         app.insertImage = function (base64, callback) {
             Office.context.document.setSelectedDataAsync(base64, {
@@ -167,7 +168,6 @@ Office.initialize = function () {
         return code;
     }
 }
-
 
 var graph;
 
