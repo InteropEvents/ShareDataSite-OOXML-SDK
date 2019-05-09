@@ -70,10 +70,11 @@ var selectTo = function (table, cell) {
 }
 
 var fileListVM = new Vue({
-    el: "#filelist",
+    el: ".spa-left",
     data: {
         fileList: [],
-        queryUrl: ''
+        queryUrl: '',
+        isLogined: false
     },
     methods: {
         getOneDriveFileList: function () {
@@ -186,20 +187,27 @@ var fileListVM = new Vue({
                 }
             });
         },
-        transDateTime: transDateTime
+        transDateTime: transDateTime,
+        logout: function () {
+            $.graph.logout();
+            this.fileList.length = 0;
+            this.isLogined = false;
+        },
+        login: function () {
+            $.graph.login(function (res) {
+                if (res) {
+                    fileListVM.getOneDriveFileList();
+                    this.isLogined = true;
+                }
+            }.bind(this));
+        }
     }
 });
 
-app.ready(function (graph) {
-    $(document).mouseup(function () {
-        isMouseDown = false;
-    });
-
-    fileListVM.getOneDriveFileList();
-    //spinner initialize
+$(document).mouseup(function () {
+    isMouseDown = false;
     var SpinnerElements = document.querySelectorAll(".ms-Spinner");
     for (var i = 0; i < SpinnerElements.length; i++) {
         new fabric['Spinner'](SpinnerElements[i]);
     }
 });
-

@@ -97,8 +97,7 @@ $.graph.login = function (auth_url) {
 }();
 
 $.graph.logout = function () {
-    window.sessionStorage.token = null;
-    window.sessionStorage.authorization = null;
-    window.sessionStorage.expire_time = null;
-    window.graph = null;
+    window.sessionStorage.removeItem("token");
+    window.sessionStorage.removeItem("authorization");
+    window.sessionStorage.removeItem("expire_time");
 };

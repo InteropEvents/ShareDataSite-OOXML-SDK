@@ -114,7 +114,7 @@ Office.initialize = function () {
             setTimeout(function () {
                 dialog.slideUp();
             }, 3000);
-        }
+        };
 
         var element = document.querySelector('.ms-MessageBanner');
         var messageBanner = new fabric.MessageBanner(element);
@@ -129,13 +129,13 @@ Office.initialize = function () {
         };
 
         //call function in app.onready when login success
-        $.graph.login(function (res) {
-            if (res) {
-                app.onready.map(function (func) {
-                    func();
-                });
-            }
-        });
+        //$.graph.login(function (res) {
+        //    if (res) {
+        //        app.onready.map(function (func) {
+        //            func();
+        //        });
+        //    }
+        //});
     });
 
     function convert26BSToDS(code) {
@@ -167,7 +167,7 @@ Office.initialize = function () {
         }
         return code;
     }
-}
+};
 
 var graph;
 
@@ -180,7 +180,7 @@ $.graph.prototype.GetFileList = function (prefixUrl) {
         {
             request_header: {
                 'Authorization': 'Bearer ' + window.sessionStorage.token,
-                "Content-Type": "application/json",
+                "Content-Type": "application/json"
             },
             request_body: {
                 stamp: app.makeid()//a random string in order to prevent cache
