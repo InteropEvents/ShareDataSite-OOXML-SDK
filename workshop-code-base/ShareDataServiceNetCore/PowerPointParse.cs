@@ -63,7 +63,19 @@ namespace ShareDataService
                     result.AddRange(TempData.GetTempDataIEnumerable(StorageType.TextType, slideText));
 
                     // Find image and add to the result.
-                    // Insert code here!
+                    foreach (var slide in slideParts)
+                    {
+                        var images = slide.ImageParts.Select(
+                        m =>
+                        {
+                            var stream = m.GetStream();
+                            var streamByteArray = new byte[stream.Length];
+                            stream.Read(streamByteArray, 0, (int)stream.Length);
+                            return new TempData { StorageType = StorageType.ImageType, Data = Convert.ToBase64String(streamByteArray) };
+                        });
+
+                        result.AddRange(images);
+                    }
 
                     return result.ToArray();
                 }
