@@ -1,141 +1,213 @@
-﻿//import { Promise, resolve } from "../../../../../../AppData/Local/Microsoft/TypeScript/2.6/node_modules/@types/bluebird";
+﻿var isMouseDown = false;
+var startRowIndex = null;
+var startCellIndex = null;
 
-Date.prototype.toUTCString = function () {
-
-    function zeroCompletion(time) {
-        return ("00" + time).slice(-2);
-    }
-    return this.getFullYear() + "-" +
-        zeroCompletion(this.getMonth() + 1) + "-" +
-        zeroCompletion(this.getDate()) + "T" +
-        zeroCompletion(this.getHours()) + ":" +
-        zeroCompletion(this.getMinutes()) + ":" +
-        zeroCompletion(this.getSeconds())
+var closedialog = function () {
+    $("#dialogcontainer").removeClass("slideIn");
+    $("#dialogcontainer").addClass("slideOut");
 }
+var showdialog = function () {
+    $("#dialogcontainer").addClass("slideIn");
+    $("#dialogcontainer").removeClass("slideOut").removeClass("hidden");
+    var content = $(".content", "#dialogcontainer");
+    content.html("");
+    $("#mesh").show();
 
-if (!String.prototype.format) {
-    String.prototype.format = function () {
-        var args = arguments;
-        return this.replace(/{(\d+)}/g, function (match, number) {
-            return typeof args[number] != 'undefined'
-                ? args[number]
-                : match
-                ;
-        });
-    };
-}
+    function showTopBorder() {
+        $(".text", content).removeClass("top");
+        $(".text", content).not(".hidden").eq(0).addClass("top")
+    }
 
-function transDateTime(time) {
-    var diff = Math.round(new Date().getTime() / 1000) - Math.round(new Date(time).getTime() / 1000);
-    if (diff < 60) {
-        return "just recently";
-    }
-    else if (diff > 60 && diff < 3600) {
-        return "{0} minutes ago".format(Math.round(diff / 60));
-    }
-    else if (diff > 3600 && diff < 3600 * 24) {
-        return "{0} hours ago".format(Math.round(diff / 3600));
-    }
-    else if (diff > 3600 * 24 && diff < 3600 * 24 * 30) {
-        return "{0} days ago".format(Math.round(diff / 3600 / 24));
-    }
-    else if (diff > 3600 * 24 * 30 && diff < 3600 * 24 * 30 * 12) {
-        return "{0} months ago".format(Math.round(diff / 3600 / 24 / 30));
-    }
-    else if (diff > 3600 * 24 * 30 * 12) {
-        return "{0} years ago".format(Math.round(diff / 3600 / 24 / 30 / 12));
+    return {
+        load: function (html) {
+            $("#mesh").hide();
+            content.append($("#checkButton").html());
+            content.append(html);
+            showTopBorder();
+            var ButtonElements = document.querySelectorAll(".ms-Button");
+            $(".ms-Button", ".btnlist").click(function () {
+                if ($(this).hasClass("ms-Button--primary")) {
+                    $(this).removeClass("ms-Button--primary")
+                    $("." + $(this).data("type"), "#dialogcontainer").addClass("hidden");
+                } else {
+                    $(this).addClass("ms-Button--primary")
+                    $("." + $(this).data("type"), "#dialogcontainer").removeClass("hidden");
+                }
+                showTopBorder();
+            })
+        }
     }
 }
 
-Object.defineProperty(Date, "timeZone", {
-    get: function () {
-        var hourOffset = parseInt(new Date().getTimezoneOffset() / 60);
-        return "Etc/GMT" +
-            (hourOffset > 0 ? "+" + hourOffset :
-                hourOffset == 0 ? "" :
-                    "-" + Math.abs(hourOffset));
+var selectTo = function (table, cell) {
+
+    var row = cell.parent();
+    var cellIndex = cell.index();
+    var rowIndex = row.index();
+    var rowStart, rowEnd, cellStart, cellEnd;
+
+    if (rowIndex < startRowIndex) {
+        rowStart = rowIndex;
+        rowEnd = startRowIndex;
+    } else {
+        rowStart = startRowIndex;
+        rowEnd = rowIndex;
     }
-})
 
-var graph;
+    if (cellIndex < startCellIndex) {
+        cellStart = cellIndex;
+        cellEnd = startCellIndex;
+    } else {
+        cellStart = startCellIndex;
+        cellEnd = cellIndex;
+    }
+    for (var i = rowStart; i <= rowEnd; i++) {
+        var rowCells = table.find("tr").eq(i).find("td");
+        for (var j = cellStart; j <= cellEnd; j++) {
+            rowCells.eq(j).addClass("selected");
+        }
+    }
+}
 
-String.prototype.endsWith = function (pattern) {
-    var d = this.length - pattern.length;
-    return d >= 0 && this.lastIndexOf(pattern) === d;
-};
-
-$.graph.prototype.GetFileList = function (prefixUrl) {
-    //https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/driveitem_list_children
-    var url = prefixUrl + "/children?select=name,id,webUrl,@microsoft.graph.downloadUrl,createdDateTime,folder,parentReference";
-    return common.Request.call(
-        this,
-        url,
-        {
-            request_header: {
-                'Authorization': 'Bearer ' + window.sessionStorage.token,
-                "Content-Type": "application/json",
-                "Prefer": 'outlook.timezone="' + Date.timeZone + '"'
-            },
-            request_body: {
-                stamp: app.makeid()//a random string in order to prevent cache
-            }
+var fileListVM = new Vue({
+    el: ".spa-left",
+    data: {
+        fileList: [],
+        queryUrl: '',
+        isLogined: false
+    },
+    methods: {
+        getOneDriveFileList: function () {
+            var self = this;
+            var prefixUrl = "https://graph.microsoft.com/v1.0/me/drive/root";
+            GetFiles(prefixUrl).then(function (data) {
+                self.fileList = data;
+            });
         },
-        "GET",
-        true);
-}
+        generateRaw: function (path, id) {
+            var _dia = showdialog();
+            console.log("file path: " + path);
+            var data = {};
+            data.accessToken = sessionStorage.token;
+            data.downloadUri = path;
+            data.fileId = id;
+            $.ajax({
+                url: "/api/getrawdata",
+                method: "post",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                dataType: "text",
+                success: function (data) {
+                    //Clear the dialog content
+                    var content = $(".content", "#dialogcontainer");
+                    content.html("");
+                    _dia.load(data);
+                    //Get table selected area content
+                    var alltable = $(".table");
+                    alltable.find("td").mousedown(function (e) {
+                        var table = $(this).parent().parent().parent();
+                        isMouseDown = true;
+                        table.prev().css("display", "block");
+                        var cell = $(this);
+                        table.find(".selected").removeClass("selected"); // deselect everything
+                        if (e.shiftKey) {
+                            selectTo(table, cell);
+                        } else {
+                            cell.addClass("selected");
+                            startCellIndex = cell.index();
+                            startRowIndex = cell.parent().index();
+                        }
 
-function GetFiles(prefixUrl) {
-    return new Promise(function (resolve) {
-        graph.GetFileList(prefixUrl).then(function (that) {
-            var promises = [], data = [];
-            $.each(that.res.value, function (i, item) {
-                if (item["@microsoft.graph.downloadUrl"] &&
-                    (item.name.endsWith(".pptx") || item.name.endsWith(".docx") || item.name.endsWith(".xlsx"))) {
-                    var object = {
-                        Id: item.id,
-                        Name: item.name,
-                        DownloadPath: item["@microsoft.graph.downloadUrl"],
-                        Path: item.parentReference.path,
-                        CreatedDateTime: item.createdDateTime
-                    };
-                    data.push(object);
-                }
-                else if (item.folder && item.folder.childCount > 0) {
-                    prefixUrl = "https://graph.microsoft.com/v1.0/me" + item.parentReference.path + "/" + item.name + ":"
-                    promises.push(GetFiles(prefixUrl));
+                        //insert table buttion click event
+                        table.prev().click(function (e) {
+                            var tableRegion = new Array();
+                            table.find("tr").each(function () {
+                                var rowArray = new Array();
+                                var rowFlag = false;
+                                $(this).find("td").each(function () {
+                                    if ($(this).hasClass("selected")) {
+                                        rowArray.push($(this).text());
+                                        rowFlag = true;
+                                    }
+                                });
+                                if (rowFlag) {
+                                    tableRegion.push(rowArray);
+                                }
+                            });
+                            console.log(tableRegion);
+                            app.insertTable(tableRegion, null);
+
+                        });
+
+                        return false; // prevent text selection
+                    })
+                        .mouseover(function () {
+                            if (!isMouseDown) return;
+                            var table = $(this).parent().parent().parent();
+                            table.find(".selected").removeClass("selected");
+                            selectTo(table, $(this));
+                        })
+                        .bind("selectstart", function () {
+                            return false;
+                        });
+
+                    $("#dialogcontainer .content").find("button.btn").click(function (e) {
+                        var table = $(this).next("table");
+                        var thead = table.find("thead th").map(function () {
+                            return $(this).text();
+                        })
+                        var tbody = table.find("tbody tr").map(function () {
+                            return $(this).find("td").map(function () {
+                                return $(this).text();
+                            });
+                        })
+                        thead = [].slice.call(thead);
+                        tbody = [].slice.call(tbody);
+                        tbody = [].map.call(tbody, function (item) {
+                            return [].slice.call(item);
+                        });
+                        app.insertTable(tbody, thead);
+                    });
+                    $("#dialogcontainer .content").find(".base.text").click(function () {
+                        app.insertText($(this).text());
+                    });
+                    $("#dialogcontainer .content").find(".base.image").click(function () {
+                        var base64 = $(this).find("img").attr("src").substring($(this).find("img").attr("src").indexOf(",") + 1);
+                        app.insertImage(base64);
+                    });
+                },
+                error: function (error) {
+                    closedialog();
+                    if (error.responseText) {
+                        app.showNotification("Error：", error.responseText);
+                    }
+                },
+                complete: function (data) {
+
                 }
             });
-            if (data.length) {
-                promises.push(data);
-            }
-            //sync every promise
-            Promise.all(promises).then(function (promises) {
-                resolve(promises);
-            })
-        });
-    }).
-        //concat all promise result to one array
-        then(function (data) {
-            var res = [];
-            [].map.call(data, function (item) {
-                res = res.concat(item);
-            });
-            return res;
-        })
+        },
+        transDateTime: transDateTime,
+        logout: function () {
+            $.graph.logout();
+            this.fileList.length = 0;
+            this.isLogined = false;
+        },
+        login: function () {
+            $.graph.login(function (res) {
+                if (res) {
+                    fileListVM.getOneDriveFileList();
+                    this.isLogined = true;
+                }
+            }.bind(this));
+        }
+    }
+});
 
-}
-
-function GetRawFiles(prefixUrl) {
-    return graph.GetFileList(prefixUrl).then(function (that) {
-        return [].filter.call(that.res.value, function (item) {
-            return item["@microsoft.graph.downloadUrl"] && item.name.endsWith(".rawdata");
-        }).
-            map(function (item) {
-                return {
-                    Name: item.name,
-                    DownloadPath: item["@microsoft.graph.downloadUrl"],
-                    CreatedDateTime: item.createdDateTime
-                };
-            })
-    });
-}
+$(document).mouseup(function () {
+    isMouseDown = false;
+    var SpinnerElements = document.querySelectorAll(".ms-Spinner");
+    for (var i = 0; i < SpinnerElements.length; i++) {
+        new fabric['Spinner'](SpinnerElements[i]);
+    }
+});

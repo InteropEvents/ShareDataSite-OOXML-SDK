@@ -157,18 +157,19 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\image\excel_32x2.png" />
+    <Content Include="Content\image\generic-placeholder.png" />
     <Content Include="Content\image\powerpoint_32x2.png" />
-    <Content Include="Content\image\psb.jpg" />
     <Content Include="Content\image\word_32x2.png" />
     <Content Include="Scripts\bluebird.js" />
     <Content Include="Scripts\FabricUI\MessageBanner.js" />
     <Content Include="Scripts\index.js" />
     <Content Include="Scripts\jquery.min.js" />
-    <Content Include="Content\Site.css" />
+    <Content Include="Content\site.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\authorize.js" />
     <Content Include="Scripts\lib\app.js" />
+    <Content Include="Scripts\lib\common.js" />
     <Content Include="Scripts\lib\oauth.js" />
     <Content Include="Scripts\Office\1\access-web-16.00.debug.js" />
     <Content Include="Scripts\Office\1\access-web-16.00.js" />
@@ -457,7 +458,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\css\" />
     <Folder Include="Views\TransformData\" />
   </ItemGroup>
   <ItemGroup>

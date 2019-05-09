@@ -1,6 +1,4 @@
-﻿$.graph = function (setting) {
-    this.setting = setting;
-}
+﻿$.graph = function () { };
 
 $.graph.prototype.login = function (token, authorization, expire_time) {
     if (token && authorization) {//called from microsoft authentication in dialog
@@ -24,12 +22,12 @@ $.graph.prototype.login = function (token, authorization, expire_time) {
     this.authorization = authorization;
     this.expire_time = expire_time;
     //auto refresh token
-    setTimeout(this.refreshToken.bind(this), function () {
-        var span = new Date(this.expire_time) - new Date();
-        return ((span - 1000000) < 0 ? 0 : (span - 1000000));
-    }.bind(this)());
+    //setTimeout(this.refreshToken.bind(this), function () {
+    //    var span = new Date(this.expire_time) - new Date();
+    //    return span - 1000000 < 0 ? 0 : span - 1000000;
+    //}.bind(this)());
     return true;
-}
+};
 
 $.graph.prototype.refreshToken = function () {
     var that = this;
@@ -47,12 +45,12 @@ $.graph.prototype.refreshToken = function () {
             console.error("refreshToken failed");
             console.error(err);
         }
-    })
-}
+    });
+};
 
-$.graph.login = function (setting) {
+$.graph.login = function (auth_url) {
     //intialize graph
-    var graph = window.graph = new $.graph(setting);
+    var graph = window.graph = new $.graph();
     var _dlg;
 
     return function (callback) {
@@ -72,12 +70,12 @@ $.graph.login = function (setting) {
                         $.ajax({
                             url: "/Authorization/Code",
                             data: {
-                                "code": authorization.code,
+                                "code": authorization.code
                             },
                             type: 'POST',
                             success: function (data) {
                                 var access_token;
-                                if ((data instanceof Object)) {
+                                if (data instanceof Object) {
                                     access_token = data.access_token;
                                 } else {
                                     access_token = data.getParam("access_token");
@@ -95,5 +93,11 @@ $.graph.login = function (setting) {
                     });
                 });
         }
-    }
-}(setting)
+    };
+}();
+
+$.graph.logout = function () {
+    window.sessionStorage.removeItem("token");
+    window.sessionStorage.removeItem("authorization");
+    window.sessionStorage.removeItem("expire_time");
+};

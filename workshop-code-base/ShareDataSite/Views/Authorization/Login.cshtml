@@ -40,7 +40,7 @@
             client_id: setting.client_id,
             redirect_uri: setting.redirect_uri,
             response_type: setting.response_type,
-            prompt: "login"
+            prompt: "select_account"
         };
         $.extend(paramObj, setting.other_params);
         location.href = setting.auth_url + '?' + $.param(paramObj);

@@ -5,8 +5,9 @@
     //register function and called when login success
     app.ready = function (func) {
         onready.push(func);
-    }
-}()
+    };
+}();
+
 //when Office loaded complete
 Office.initialize = function () {
     var app = window.app;
@@ -21,7 +22,7 @@ Office.initialize = function () {
                 text += possible.charAt(Math.floor(Math.random() * possible.length));
 
             return text;
-        }
+        };
 
         app.insertImage = function (base64, callback) {
             Office.context.document.setSelectedDataAsync(base64, {
@@ -76,13 +77,13 @@ Office.initialize = function () {
                             var address = range.address;
                             var exclamationMark = range.address.lastIndexOf("!"), colon = address.lastIndexOf(":");
                             var start, end, row;
-                            var tempStart = address.substring(exclamationMark + 1, colon == -1 ? address.length : colon);
+                            var tempStart = address.substring(exclamationMark + 1, colon === -1 ? address.length : colon);
                             var firstDigit = tempStart.match(/\d/);
                             var indexed = tempStart.indexOf(firstDigit);
                             row = parseInt(tempStart.substr(indexed)) + tableLength - 1;
                             start = tempStart.substr(0, indexed);
                             end = convert26BSToDS(start) + tableWidth - 1;
-                            if (colon == -1) {
+                            if (colon === -1) {
                                 return address + ":" + convertDSTo26BS(end) + row;
                             } else {
                                 return address.substring(0, colon) + ":" + convertDSTo26BS(end) + row;
@@ -113,7 +114,7 @@ Office.initialize = function () {
             setTimeout(function () {
                 dialog.slideUp();
             }, 3000);
-        }
+        };
 
         var element = document.querySelector('.ms-MessageBanner');
         var messageBanner = new fabric.MessageBanner(element);
@@ -125,19 +126,17 @@ Office.initialize = function () {
             messageBanner.toggleExpansion();
 
             setTimeout(messageBanner.hideBanner, 3000);
-        }
+        };
 
         //call function in app.onready when login success
-        $.graph.login(function (res) {
-            if (res) {
-                app.onready.map(function (func) {
-                    func();
-                })
-            }
-        });
-
-    })
-
+        //$.graph.login(function (res) {
+        //    if (res) {
+        //        app.onready.map(function (func) {
+        //            func();
+        //        });
+        //    }
+        //});
+    });
 
     function convert26BSToDS(code) {
         var num = -1;
@@ -159,8 +158,8 @@ Office.initialize = function () {
             return code;
         }
         while (num > 0) {
-            var m = num % 26
-            if (m == 0) {
+            var m = num % 26;
+            if (m === 0) {
                 m = 26;
             }
             code = String.fromCharCode(64 + parseInt(m)) + code;
@@ -168,126 +167,81 @@ Office.initialize = function () {
         }
         return code;
     }
-}
+};
 
-//convert hash string to Object
-$.hashParam = function (hashstr) {
-    var hash = hashstr.split("&");
-    var params = {}
-    for (var i = 0; i < hash.length; i++) {
-        var split = hash[i].indexOf("=");
-        params[hash[i].substring(0, split)] = hash[i].substring(split + 1);
-    }
-    return params;
-}
-//package some request method
-var common = function () {
-    //get row number and file from stack
-    function codeRowNum(depth) {
-        if (!depth)
-            depth = 1;
-        try {
-            throw new Error();
-        } catch (e) {
-            var stack = e.stack.substring(5).replace(/[\r\n]/i, "").split(/[\r\n]/g);
-            var codeRow = stack[depth];
-            return codeRow.substring(codeRow.lastIndexOf("/") + 1, codeRow.lastIndexOf(":"));
-        }
-    }
+var graph;
 
-    function response(res, resStatus, resPromiseObj, isLogin) {
-        //if requeset is error and response data is different from the succee
-        if (resStatus == 'error') {
-            var temp = res;
-            res = res.responseText;
-            resPromiseObj = temp;
-        }
+$.graph.prototype.GetFileList = function (prefixUrl) {
+    //https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/driveitem_list_children
+    var url = prefixUrl + "/children?select=name,id,webUrl,@microsoft.graph.downloadUrl,createdDateTime,folder,parentReference";
+    return common.Request.call(
+        this,
+        url,
+        {
+            request_header: {
+                'Authorization': 'Bearer ' + window.sessionStorage.token,
+                "Content-Type": "application/json"
+            },
+            request_body: {
+                stamp: app.makeid()//a random string in order to prevent cache
+            }
+        },
+        "GET",
+        true);
+};
 
-        this.res = this.response = res;
-
-        if (!isLogin) {
-            var headerArr = resPromiseObj.getAllResponseHeaders().trim().split(/[\r\n]+/);
-            var headerObj = {};
-            headerArr.forEach(function (line) {
-                var parts = line.split(': ');
-                var header = parts.shift();
-                var value = parts.join(': ');
-                headerObj[header] = value;
-            });
-
-            vm.response.response_body = res;
-            vm.response.response_header = headerObj;
-        }
-
-        this.status = resStatus;
-    }
-
-    function request(url, data, method, isLogin) {
-        var stack = codeRowNum(3);
-
-        if (!method && typeof data === "string")
-            method = data, data = null;
-        //use Promise to handle async process
-        var promise = new Promise(function (resolve, reject) {
-            var option = {
-                url: url,
-                headers: typeof data.request_header == 'object' ? data.request_header : JSON.parse(data.request_header),
-                method: method,
-                success: function (res, resStatus, resPromiseObj) {
-                    var callResponse = response.bind(this, res, resStatus, resPromiseObj, isLogin);
-                    callResponse()
-                    resolve(this);
-                },
-                error: function (res, resStatus, resPromiseObj) {
-                    var callResponse = response.bind(this, res, resStatus, resPromiseObj, isLogin);
-                    callResponse()
-                    reject(this);
+function GetFiles(prefixUrl) {
+    return new Promise(function (resolve) {
+        graph.GetFileList(prefixUrl).then(function (that) {
+            var promises = [], data = [];
+            $.each(that.res.value, function (i, item) {
+                if (item["@microsoft.graph.downloadUrl"] &&
+                    (item.name.endsWith(".pptx") || item.name.endsWith(".docx") || item.name.endsWith(".xlsx"))) {
+                    var object = {
+                        Id: item.id,
+                        Name: item.name,
+                        DownloadPath: item["@microsoft.graph.downloadUrl"],
+                        Path: item.parentReference.path,
+                        CreatedDateTime: item.createdDateTime
+                    };
+                    data.push(object);
                 }
-            };
-            option.context = {
-                url: option.url,
-                method: option.method,
-                codeSituation: stack,
-                data: {}
+                else if (item.folder && item.folder.childCount > 0) {
+                    prefixUrl = "https://graph.microsoft.com/v1.0/me" + item.parentReference.path + "/" + item.name + ":"
+                    promises.push(GetFiles(prefixUrl));
+                }
+            });
+            if (data.length) {
+                promises.push(data);
             }
-            if (data && data.request_body) {
-                option.data = typeof data.request_body === 'object' ? data.request_body : JSON.parse(data.request_body);
-                option.context.data = option.data;
-            }
-            $.ajax(option);
-        })
-        promise.catch(function (ajax) {
-            var err = ajax.res;
-            console.info(err.status + " " + err.statusText)
-            console.info(err.responseText)
+            //sync every promise
+            Promise.all(promises).then(function (promises) {
+                resolve(promises);
+            });
+        });
+    }).
+        //concat all promise result to one array
+        then(function (data) {
+            var res = [];
+            [].map.call(data, function (item) {
+                res = res.concat(item);
+            });
+            return res;
         });
 
-        return promise;
-    }
+}
 
-    $.post = function post(url, data) {
-        if (typeof data === "object")//used to crossDomain
-            data = JSON.stringify(data);
-        return request.call(this, url, data, "POST");
-    }
-
-    $.get = function get(url, data) {
-        return request.call(this, url, data, "GET");
-    }
-
-    $.patch = function patch(url, data) {
-        if (typeof data === "object")//used to crossDomain
-            data = JSON.stringify(data);
-        return request.call(this, url, data, "PATCH");
-    }
-
-    $.del = function del(url, data) {
-        if (typeof data === "object")//used to crossDomain
-            data = JSON.stringify(data);
-        return request.call(this, url, data, "DELETE");
-    }
-
-    return {
-        Request: request
-    };
-}()
+function GetRawFiles(prefixUrl) {
+    return graph.GetFileList(prefixUrl).then(function (that) {
+        return [].filter.call(that.res.value, function (item) {
+            return item["@microsoft.graph.downloadUrl"] && item.name.endsWith(".rawdata");
+        }).
+            map(function (item) {
+                return {
+                    Name: item.name,
+                    DownloadPath: item["@microsoft.graph.downloadUrl"],
+                    CreatedDateTime: item.createdDateTime
+                };
+            });
+    });
+}
