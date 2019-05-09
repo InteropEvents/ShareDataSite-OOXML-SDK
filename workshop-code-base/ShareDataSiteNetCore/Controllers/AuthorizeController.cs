@@ -27,8 +27,8 @@ namespace ShareDataSiteNetCore.Controllers
               $"client_id={azureAD.Client_Id}&" +
               $"redirect_uri={HttpUtility.UrlEncode(azureAD.Redirect_Uri)}&" +
               $"response_type={azureAD.Response_Type}&" +
-              $"scope={azureAD.Scope}";
-              //$"prompt=login";
+              $"scope={azureAD.Scope}&" +
+              $"prompt=select_account";
             return PartialView(auth_url);
         }
 
