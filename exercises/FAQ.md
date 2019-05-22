@@ -10,4 +10,10 @@ This is caused by the specified path too long. You can resolve it by shorting yo
 e.g. C:\git\ShareDataSite-OOXML-SDK
 ![alt text](imgs/ShortPath.PNG "Short Path")
 
+
+## How to solve the below error while loading the Office Add-in.
+Error occurred after Office Add-in loaded:
+![alt text](imgs/FAQ.png "Error")
+To fix this error, we can remove then add back "ShareDataSite" in the dropdown list.
+![alt text](imgs/FAQ.png "Solution.PNG")
  
