@@ -13,7 +13,6 @@ e.g. C:\git\ShareDataSite-OOXML-SDK
 
 ## How to solve the below error while loading the Office Add-in.
 Error occurred after Office Add-in loaded:
-![alt text](imgs/Error.PNG "Error")
+ ![alt text](imgs/Error.PNG "Error")
 To fix this error, we can remove then add back "ShareDataSite" in the dropdown list.
-![alt text](imgs/Solution.PNG "Solution")
- 
+ ![alt text](imgs/Solution.PNG "Solution")
